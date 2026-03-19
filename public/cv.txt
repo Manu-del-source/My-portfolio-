@@ -1,0 +1,69 @@
+EMMANUEL KIPTOO YEGON
+📍 Eldoret, Kenya
+📧 kiptooe213@gmail.com
+📱 +254726090372
+🌐 GitHub: https://github.com/Manu-del-source
+
+---
+
+PROFESSIONAL SUMMARY
+
+Self-driven and passionate Python Developer and Web Designer with hands-on experience building automation bots, trading tools, and portfolio websites. Skilled in developing real-world projects using Python and deploying applications using modern tools. Currently expanding expertise in freelancing and scalable web solutions.
+
+---
+
+SKILLS
+
+Programming & Development
+- Python (Automation, Bots, APIs)
+- HTML, CSS, JavaScript (Web Design)
+
+Other Skills
+- Problem-solving
+- Self-learning & adaptability
+- Freelancing (Fiverr & Upwork setup)
+
+---
+
+PROJECTS
+
+1. Deriv Trading Bot (Python)
+- Built an automated trading bot for Deriv platform
+- Integrated signal logic and trading execution
+
+2. Sniper Bot V5
+- Developed a refined trading bot with improved signal accuracy
+- Organized project structure
+
+3. Portfolio Website
+- Designed a personal website to showcase projects
+- Integrated contact options (WhatsApp, Telegram, Email)
+- Focused on clean UI and client conversion
+
+4. WhatsApp Bot (In Progress)
+- Building a bot using Python, Twilio, and Render
+- Automating responses and user interaction
+
+---
+
+EXPERIENCE
+
+Freelance Developer (Beginner Level)
+- Setting up Fiverr and Upwork profiles
+- Offering Python automation and bot development services
+- Learning client communication and service delivery
+
+---
+
+LANGUAGES
+
+- English (Fluent)
+- Swahili (Fluent)
+
+---
+
+INTERESTS
+
+- Tech innovation
+- Freelancing & online income
+- Automation systems

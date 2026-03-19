@@ -16,8 +16,7 @@ import {
   Code,
   Globe,
   Cpu,
-  Network,
-  Briefcase
+  Network
 } from 'lucide-react';
 
 // --- Data ---
@@ -30,7 +29,7 @@ const NAV_LINKS = [
 ];
 
 const SKILLS = [
-  { name: 'Python', icon: <Code className="w-6 h-6" />, progress: 95 },
+  { name: 'Python (Automation, Bots, APIs)', icon: <Code className="w-6 h-6" />, progress: 95 },
   { name: 'HTML, CSS, JavaScript', icon: <Globe className="w-6 h-6" />, progress: 85 },
   { name: 'Automation & Bots', icon: <Bot className="w-6 h-6" />, progress: 90 },
   { name: 'Web Design', icon: <LayoutIcon className="w-6 h-6" />, progress: 80 },
@@ -61,31 +60,31 @@ function LayoutIcon(props: any) {
 const PROJECTS = [
   {
     title: 'Deriv Trading Bot',
-    description: 'A Python-based bot that generates trading signals and automates trade execution using advanced market analysis and algorithms.',
-    image: 'https://picsum.photos/seed/trading/800/600?blur=1',
-    tags: ['Python', 'Deriv API', 'Automation', 'Data Analysis'],
-    link: 'https://github.com/username/deriv-trading-bot',
+    description: 'An automated trading bot for the Deriv platform. Integrates signal logic and automated trading execution using Python.',
+    image: 'https://picsum.photos/seed/tradingbot/800/600',
+    tags: ['Python', 'Trading', 'Deriv API', 'Automation'],
+    link: 'https://github.com/Manu-del-source',
   },
   {
-    title: 'WhatsApp Bot (Twilio + Python)',
-    description: 'An intelligent bot that sends automated messages and responds to user inquiries seamlessly using WhatsApp integration.',
-    image: 'https://picsum.photos/seed/whatsapp/800/600?blur=1',
-    tags: ['Python', 'Twilio API', 'Chatbot', 'Webhooks'],
-    link: 'https://github.com/username/whatsapp-bot',
+    title: 'Sniper Bot V5',
+    description: 'A refined trading bot with improved signal accuracy and optimized execution. Organized project structure managed via GitHub.',
+    image: 'https://picsum.photos/seed/market/800/600',
+    tags: ['Python', 'Trading', 'Algorithms'],
+    link: 'https://github.com/Manu-del-source',
   },
   {
-    title: 'Telegram Signal Bot',
-    description: 'A specialized bot that sends filtered, high-probability trading signals directly to a Telegram channel, reducing false signals.',
-    image: 'https://picsum.photos/seed/telegram/800/600?blur=1',
-    tags: ['Python', 'Telegram API', 'Signal Processing'],
-    link: 'https://github.com/username/telegram-signal-bot',
+    title: 'Portfolio Website',
+    description: 'A personal website designed to showcase projects and skills, featuring clean UI, responsive design, and integrated contact options.',
+    image: 'https://picsum.photos/seed/webdesign/800/600',
+    tags: ['HTML', 'CSS', 'JavaScript', 'React'],
+    link: 'https://github.com/Manu-del-source',
   },
   {
-    title: 'Modern Website Projects',
-    description: 'A collection of sleek, responsive, and modern websites built with a focus on clean UI/UX and fast loading times.',
-    image: 'https://picsum.photos/seed/websites/800/600?blur=1',
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design'],
-    link: 'https://github.com/username/modern-websites',
+    title: 'WhatsApp Bot (In Progress)',
+    description: 'An intelligent bot built using Python, Twilio, and Render to automate responses and handle user interactions seamlessly.',
+    image: 'https://picsum.photos/seed/messaging/800/600',
+    tags: ['Python', 'Twilio', 'Render', 'Chatbot'],
+    link: 'https://github.com/Manu-del-source',
   },
 ];
 
@@ -208,7 +207,7 @@ const Hero = () => {
           <a href="#contact" className="bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-700 dark:text-emerald-400 px-8 py-4 rounded-full font-semibold transition-all flex items-center gap-2">
             Contact Me
           </a>
-          <a href="#" className="flex items-center gap-2 px-6 py-4 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
+          <a href="/cv.txt" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-4 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
             <Download className="w-5 h-5" /> Download CV
           </a>
         </div>
@@ -232,13 +231,13 @@ const About = () => {
           </h2>
           <div className="space-y-6 text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg md:text-xl">
             <p>
-              I am deeply passionate about coding, automation, and building real-world tech solutions that solve actual problems. My journey in tech is driven by a constant curiosity to make systems smarter and more efficient.
+              I am a self-driven and passionate <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">Python Developer and Web Designer</strong> with hands-on experience building automation bots, trading tools, and portfolio websites.
             </p>
             <p>
-              I specialize in <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">Python development, web design, and bot creation</strong>. Whether it's developing a complex trading algorithm, an interactive web interface, or an automated messaging bot, I love bringing ideas to life through code.
+              Skilled in developing real-world projects using Python and deploying applications using modern tools. My expertise spans across <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">automation, APIs, and web design</strong>, with a growing focus on scalable web solutions.
             </p>
             <p>
-              Currently, I am highly focused on <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">freelancing and building online income streams</strong>. I partner with clients worldwide to deliver high-quality, reliable, and scalable digital products.
+              Currently, I am expanding my experience as a <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">Freelance Developer</strong>, offering Python automation and bot development services while continuously learning and adapting to new technologies.
             </p>
           </div>
         </motion.div>
@@ -300,7 +299,7 @@ const Projects = () => {
               <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-zinc-900 dark:text-white">Featured Projects</h2>
               <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl">A selection of my best work in automation, bots, and web development.</p>
             </div>
-            <a href="https://github.com/username" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+            <a href="https://github.com/Manu-del-source" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
               View more on GitHub <Github className="w-5 h-5" />
             </a>
           </div>
@@ -319,10 +318,17 @@ const Projects = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <a href={project.link} className="bg-emerald-500 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      View Details <ExternalLink className="w-4 h-4" />
-                    </a>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 gap-3">
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-zinc-800">
+                        <Github className="w-4 h-4" /> Code
+                      </a>
+                    )}
+                    {project.liveLink && (
+                      <a href={project.liveLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-emerald-600">
+                        <ExternalLink className="w-4 h-4" /> Live Demo
+                      </a>
+                    )}
                   </div>
                 </div>
                 <div className="p-8">
@@ -347,6 +353,64 @@ const Projects = () => {
 };
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    linkedin: '',
+    message: ''
+  });
+  const [errors, setErrors] = useState({
+    email: '',
+    linkedin: '',
+    message: ''
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { email: '', linkedin: '', message: '' };
+
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (formData.linkedin && !/^https?:\/\/(www\.)?linkedin\.com\/.*$/.test(formData.linkedin)) {
+      newErrors.linkedin = 'Please enter a valid LinkedIn profile URL';
+      isValid = false;
+    }
+
+    if (!formData.message) {
+      newErrors.message = 'Message is required';
+      isValid = false;
+    } else if (formData.message.length < 10) {
+      newErrors.message = 'Message must be at least 10 characters long';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setIsSubmitted(true);
+      setFormData({ email: '', linkedin: '', message: '' });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+    if (errors[id as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [id]: '' }));
+    }
+  };
+
   return (
     <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
       <div className="text-center mb-16">
@@ -371,26 +435,56 @@ const Contact = () => {
           className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-3xl shadow-sm"
         >
           <h3 className="font-display text-2xl font-bold mb-6 text-zinc-900 dark:text-white">Send me a message</h3>
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {isSubmitted && (
+              <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl text-sm font-medium border border-emerald-200 dark:border-emerald-500/20">
+                Thank you! Your message has been sent successfully.
+              </div>
+            )}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Email Address</label>
-              <input type="email" id="email" placeholder="your@email.com" className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white transition-shadow" />
+              <input 
+                type="email" 
+                id="email" 
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="your@email.com" 
+                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow`} 
+              />
+              {errors.email && <p className="mt-1.5 text-sm text-red-500">{errors.email}</p>}
             </div>
             <div>
-              <label htmlFor="linkedin" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">LinkedIn Profile</label>
-              <input type="url" id="linkedin" placeholder="linkedin.com/in/yourprofile" className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white transition-shadow" />
-            </div>
-            <div>
-              <label htmlFor="freelance" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Fiverr / Upwork Profile (Optional)</label>
-              <input type="url" id="freelance" placeholder="fiverr.com/yourprofile" className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white transition-shadow" />
+              <label htmlFor="linkedin" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">LinkedIn Profile (Optional)</label>
+              <input 
+                type="url" 
+                id="linkedin" 
+                value={formData.linkedin}
+                onChange={handleChange}
+                placeholder="https://linkedin.com/in/yourprofile" 
+                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.linkedin ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow`} 
+              />
+              {errors.linkedin && <p className="mt-1.5 text-sm text-red-500">{errors.linkedin}</p>}
             </div>
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Message</label>
-              <textarea id="message" rows={4} placeholder="Tell me about your project..." className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white transition-shadow resize-none"></textarea>
+              <textarea 
+                id="message" 
+                rows={4} 
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell me about your project..." 
+                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow resize-none`}
+              ></textarea>
+              {errors.message && <p className="mt-1.5 text-sm text-red-500">{errors.message}</p>}
             </div>
-            <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 px-8 py-4 rounded-xl font-semibold transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2">
-              Send Message <Send className="w-4 h-4" />
-            </button>
+            <motion.button 
+              type="submit" 
+              animate={isSubmitted ? { scale: [1, 1.05, 1] } : {}}
+              transition={{ duration: 0.3 }}
+              className={`w-full ${isSubmitted ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400'} text-white dark:text-zinc-950 px-8 py-4 rounded-xl font-semibold transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2`}
+            >
+              {isSubmitted ? "Message Sent!" : "Send Message"} <Send className="w-4 h-4" />
+            </motion.button>
           </form>
         </motion.div>
 
@@ -445,7 +539,9 @@ const Contact = () => {
           </a>
 
           <a 
-            href="#" 
+            href="https://www.linkedin.com/in/emmanuel-kiptoo-aa5b383a8" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-blue-600/50 dark:hover:border-blue-600/50 shadow-sm hover:shadow-md group"
           >
             <div className="w-12 h-12 bg-blue-50 dark:bg-zinc-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-600/10 rounded-2xl flex items-center justify-center transition-colors">
@@ -454,34 +550,6 @@ const Contact = () => {
             <div className="text-center">
               <h3 className="font-bold text-zinc-900 dark:text-white">LinkedIn</h3>
               <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">Connect</p>
-            </div>
-          </a>
-
-          <a 
-            href="#" 
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-green-500/50 dark:hover:border-green-500/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-green-50 dark:bg-zinc-800 group-hover:bg-green-100 dark:group-hover:bg-green-500/10 rounded-2xl flex items-center justify-center transition-colors">
-              <Briefcase className="w-6 h-6 text-green-600 dark:text-zinc-400 group-hover:text-green-500 transition-colors" />
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">Upwork</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">Hire me</p>
-            </div>
-          </a>
-
-          <a 
-            href="#" 
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-emerald-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/10 rounded-2xl flex items-center justify-center transition-colors">
-              <svg className="w-6 h-6 text-emerald-600 dark:text-zinc-400 group-hover:text-emerald-500 transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21.53 7.15L20.31 11H24L21.53 7.15ZM14.33 11H18.76L19.98 7.15H15.55L14.33 11ZM8.5 11H12.93L14.15 7.15H9.72L8.5 11ZM0 11H7.1L8.32 7.15H0V11ZM0 12.5V24H3.8V17.35H7.1L8.32 13.5H0V12.5Z"/>
-              </svg>
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">Fiverr</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">View gigs</p>
             </div>
           </a>
         </motion.div>
@@ -503,10 +571,10 @@ const Footer = () => {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <a href="#" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-400 transition-colors">
+          <a href="https://github.com/Manu-del-source" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-400 transition-colors">
             <Github className="w-5 h-5" />
           </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-500/20 dark:hover:text-blue-400 transition-colors">
+          <a href="https://www.linkedin.com/in/emmanuel-kiptoo-aa5b383a8" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-500/20 dark:hover:text-blue-400 transition-colors">
             <Linkedin className="w-5 h-5" />
           </a>
         </div>
