@@ -1,613 +1,940 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  MessageCircle, 
-  Send, 
-  ExternalLink, 
-  Menu, 
-  X,
-  Moon,
-  Sun,
-  Download,
-  Bot,
-  Code,
-  Globe,
-  Cpu,
-  Network
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
+import {
+  Github, Linkedin, Mail, MessageCircle, Send, ExternalLink,
+  Menu, X, Download, Code2, Globe, Bot, Cpu, Database,
+  CreditCard, Zap, Terminal, ArrowRight, MapPin, Phone
 } from 'lucide-react';
 
-// --- Data ---
+// ─── TYPES ─────────────────────────────────────────────────────────────────
+
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  badge: string;
+  badgeColor: 'cyan' | 'green' | 'purple' | 'yellow';
+  link: string;
+  icon: string;
+}
+
+interface SkillGroup {
+  title: string;
+  icon: React.ReactNode;
+  color: 'cyan' | 'purple' | 'pink' | 'yellow';
+  tags: string[];
+}
+
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
 const NAV_LINKS = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Projects', href: '#projects' },
   { name: 'Skills', href: '#skills' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Experience', href: '#experience' },
   { name: 'Contact', href: '#contact' },
 ];
 
-const SKILLS = [
-  { name: 'Python (Automation, Bots, APIs)', icon: <Code className="w-6 h-6" />, progress: 95 },
-  { name: 'HTML, CSS, JavaScript', icon: <Globe className="w-6 h-6" />, progress: 85 },
-  { name: 'Automation & Bots', icon: <Bot className="w-6 h-6" />, progress: 90 },
-  { name: 'Web Design', icon: <LayoutIcon className="w-6 h-6" />, progress: 80 },
-  { name: 'API Integration', icon: <Network className="w-6 h-6" />, progress: 88 },
-];
-
-function LayoutIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-      <line x1="3" x2="21" y1="9" y2="9" />
-      <line x1="9" x2="9" y1="21" y2="9" />
-    </svg>
-  )
-}
-
-const PROJECTS = [
+const SKILL_GROUPS: SkillGroup[] = [
   {
-    title: 'Deriv Trading Bot',
-    description: 'An automated trading bot for the Deriv platform. Integrates signal logic and automated trading execution using Python.',
-    image: 'https://picsum.photos/seed/tradingbot/800/600',
-    tags: ['Python', 'Trading', 'Deriv API', 'Automation'],
-    link: 'https://github.com/Manu-del-source',
+    title: 'Frontend',
+    icon: <Globe className="w-5 h-5" />,
+    color: 'cyan',
+    tags: ['React 19', 'Next.js 15', 'TypeScript', 'Tailwind CSS', 'Vite', 'Framer Motion'],
   },
   {
-    title: 'Sniper Bot V5',
-    description: 'A refined trading bot with improved signal accuracy and optimized execution. Organized project structure managed via GitHub.',
-    image: 'https://picsum.photos/seed/market/800/600',
-    tags: ['Python', 'Trading', 'Algorithms'],
-    link: 'https://github.com/Manu-del-source',
+    title: 'Backend',
+    icon: <Code2 className="w-5 h-5" />,
+    color: 'purple',
+    tags: ['Node.js', 'Express', 'Python', 'FastAPI', 'Socket.IO', 'Redis'],
   },
   {
-    title: 'Portfolio Website',
-    description: 'A personal website designed to showcase projects and skills, featuring clean UI, responsive design, and integrated contact options.',
-    image: 'https://picsum.photos/seed/webdesign/800/600',
-    tags: ['HTML', 'CSS', 'JavaScript', 'React'],
-    link: 'https://github.com/Manu-del-source',
+    title: 'Data & Infra',
+    icon: <Database className="w-5 h-5" />,
+    color: 'pink',
+    tags: ['Supabase', 'PostgreSQL', 'MongoDB', 'Prisma', 'Docker', 'SQLite'],
   },
   {
-    title: 'WhatsApp Bot (In Progress)',
-    description: 'An intelligent bot built using Python, Twilio, and Render to automate responses and handle user interactions seamlessly.',
-    image: 'https://picsum.photos/seed/messaging/800/600',
-    tags: ['Python', 'Twilio', 'Render', 'Chatbot'],
-    link: 'https://github.com/Manu-del-source',
+    title: 'Payments & APIs',
+    icon: <CreditCard className="w-5 h-5" />,
+    color: 'yellow',
+    tags: ['M-Pesa Daraja', 'STK Push', 'MikroTik API', 'Telegram Bot API', 'WebSockets'],
+  },
+  {
+    title: 'AI & Trading',
+    icon: <Bot className="w-5 h-5" />,
+    color: 'cyan',
+    tags: ['Claude API', 'Gemini API', 'RSI / MACD', 'Bollinger Bands', 'ccxt', 'SMC / BOS'],
+  },
+  {
+    title: 'Tools & Env',
+    icon: <Terminal className="w-5 h-5" />,
+    color: 'purple',
+    tags: ['Termux / Android', 'Git', 'Vercel', 'PWA', 'JWT Auth', 'ReportLab'],
   },
 ];
 
-// --- Components ---
+const PROJECTS: Project[] = [
+  {
+    title: 'MaliHub Kenya',
+    description: 'Full-stack second-hand goods marketplace for Kenya. M-Pesa STK Push payments, Supabase PostgreSQL backend, seller dashboards, and a complete Next.js 15 frontend with listing management.',
+    tags: ['Next.js 15', 'Supabase', 'M-Pesa Daraja', 'TypeScript', 'Tailwind'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://github.com/Manu-del-source',
+    icon: '🛒',
+  },
+  {
+    title: 'DollarPrinter AI',
+    description: 'AI-powered automated trading platform with a full technical analysis engine — RSI, MACD, Bollinger Bands, EMA signals. Real-time via Socket.IO, containerised with Docker, persisted via Prisma + Redis.',
+    tags: ['Node.js', 'Express', 'Socket.IO', 'Redis', 'Docker', 'Prisma'],
+    badge: 'Backend',
+    badgeColor: 'purple',
+    link: 'https://github.com/Manu-del-source',
+    icon: '📈',
+  },
+  {
+    title: 'WiFiFlow SaaS',
+    description: 'WiFi billing and hotspot management platform for African ISPs, cyber cafes, and hotels. MikroTik router integration, M-Pesa voucher system, captive portal, and a cyberpunk dark UI.',
+    tags: ['Next.js', 'MikroTik API', 'M-Pesa', 'PostgreSQL', 'Tailwind'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://github.com/Manu-del-source',
+    icon: '📡',
+  },
+  {
+    title: 'JARVIS AI Assistant',
+    description: 'Iron Man HUD dashboard backed by a Python FastAPI + Claude API engine. Dual-layer SQLite memory, WebSocket real-time comms, and tool-use — built entirely on Termux.',
+    tags: ['Python', 'FastAPI', 'Claude API', 'React', 'SQLite', 'WebSockets'],
+    badge: 'Full-Stack',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source',
+    icon: '🤖',
+  },
+  {
+    title: 'EduPrime Academy',
+    description: 'School management system with student records, attendance, grading, and M-Pesa fee collection. React/Vite frontend, Node.js + MongoDB backend, JWT auth — packaged as a downloadable product.',
+    tags: ['React', 'Node.js', 'MongoDB', 'M-Pesa', 'JWT'],
+    badge: 'SaaS',
+    badgeColor: 'yellow',
+    link: 'https://github.com/Manu-del-source',
+    icon: '🎓',
+  },
+  {
+    title: 'Deriv Signal Engine',
+    description: 'Real-time synthetic indices signal engine for Deriv — Volatility, Boom/Crash, and 1s indices. WebSocket candle aggregation, multi-strategy SMC/CRT/BOS/SR validation, Telegram delivery, React dashboard.',
+    tags: ['Python', 'WebSockets', 'SMC / BOS', 'Telegram API', 'React'],
+    badge: 'Trading',
+    badgeColor: 'purple',
+    link: 'https://github.com/Manu-del-source',
+    icon: '⚡',
+  },
+];
 
-const Navbar = ({ isDark, toggleTheme }: { isDark: boolean, toggleTheme: () => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+const EXPERIENCE = [
+  {
+    period: '2024 — Present',
+    role: 'Independent Full-Stack Developer',
+    company: 'Freelance · Eldoret, Kenya',
+    desc: 'Building and shipping full-stack SaaS platforms, fintech products, and AI-powered tools targeting African markets. Specialising in M-Pesa integrations, real-time systems, and mobile-first development on Termux.',
+  },
+  {
+    period: '2023 — 2024',
+    role: 'Algorithmic Trading Developer',
+    company: 'Self-Directed · Deriv / Crypto Markets',
+    desc: 'Designed and built automated trading systems using RSI, MACD, EMA, SMC, and Bollinger Bands strategies. Deployed live signal engines on Deriv synthetic indices with real-time Telegram delivery and React dashboards.',
+  },
+  {
+    period: '2022 — 2023',
+    role: 'Web Developer & Digital Entrepreneur',
+    company: 'Independent · Kenya',
+    desc: 'Built and sold digital products including school management systems, POS platforms, and eBooks. Established M-Pesa payment integrations and SaaS monetisation strategies tailored to the Kenyan SMB market.',
+  },
+];
+
+const TECH_MARQUEE = [
+  'React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'M-Pesa Daraja',
+  'Supabase', 'PostgreSQL', 'Docker', 'Socket.IO', 'FastAPI', 'Redis',
+  'Claude API', 'Tailwind CSS', 'Prisma', 'MikroTik API', 'WebSockets', 'Vite',
+];
+
+// ─── PARTICLE CANVAS ────────────────────────────────────────────────────────
+
+function ParticleCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d')!;
+    let W = 0, H = 0;
+    let raf: number;
+
+    const COLORS = ['#00ffff', '#bf5fff', '#ff4dac', '#ffe94d'];
+
+    interface P { x: number; y: number; vx: number; vy: number; r: number; color: string; alpha: number; }
+    let particles: P[] = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function makeParticle(): P {
+      return {
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 2 + 0.6,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        alpha: Math.random() * 0.5 + 0.15,
+      };
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < 90; i++) particles.push(makeParticle());
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8; ctx.shadowColor = p.color;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill(); ctx.restore();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.save();
+            ctx.globalAlpha = (1 - dist / 130) * 0.12;
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+            ctx.stroke(); ctx.restore();
+          }
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    }
+    draw();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 shadow-sm' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-20">
-          <a href="#home" className="font-display font-bold text-xl tracking-tighter text-zinc-900 dark:text-zinc-50">
-            E. KIPTOO<span className="text-emerald-500">.</span>
-          </a>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <a key={link.name} href={link.href} className="text-sm font-medium text-zinc-600 hover:text-emerald-500 dark:text-zinc-400 dark:hover:text-emerald-400 transition-colors">
-                {link.name}
-              </a>
-            ))}
-            
-            <div className="flex items-center gap-4 ml-4 border-l border-zinc-200 dark:border-zinc-800 pl-4">
-              <button 
-                onClick={toggleTheme} 
-                className="p-2 text-zinc-600 hover:text-emerald-500 dark:text-zinc-400 dark:hover:text-emerald-400 transition-colors rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                aria-label="Toggle Dark Mode"
-              >
-                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <a href="#contact" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md shadow-emerald-500/20">
-                Hire Me
-              </a>
-            </div>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
-            <button onClick={toggleTheme} className="p-2 text-zinc-600 dark:text-zinc-400">
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-            <button className="p-2 text-zinc-600 dark:text-zinc-400" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Nav */}
-      {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-6 py-4 shadow-lg"
-        >
-          <div className="flex flex-col gap-4">
-            {NAV_LINKS.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className="text-zinc-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 font-medium py-2"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.name}
-              </a>
-            ))}
-            <a href="#contact" onClick={() => setIsOpen(false)} className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 px-5 py-3 rounded-xl text-center font-semibold mt-2 transition-colors shadow-md shadow-emerald-500/20">
-              Hire Me
-            </a>
-          </div>
-        </motion.div>
-      )}
-    </nav>
+    <canvas
+      ref={canvasRef}
+      style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, opacity: 0.5 }}
+    />
   );
-};
+}
 
-const Hero = () => {
-  return (
-    <section id="home" className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 max-w-7xl mx-auto flex flex-col justify-center min-h-[90vh]">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.5 }}
-        className="max-w-4xl"
-      >
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-semibold mb-8 shadow-sm">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 dark:bg-emerald-500"></span>
-          </span>
-          Available for Freelance Projects
-        </div>
-        
-        <h2 className="text-xl md:text-2xl font-medium text-zinc-600 dark:text-zinc-400 mb-4">
-          Hi, I'm <span className="text-zinc-900 dark:text-white font-bold">Emmanuel Kiptoo Yegon</span>
-        </h2>
-        
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-tight text-zinc-900 dark:text-white">
-          Python Developer <br />
-          <span className="text-zinc-400 dark:text-zinc-500">& Web Designer</span>
-        </h1>
-        
-        <p className="text-zinc-600 dark:text-zinc-400 text-xl md:text-2xl max-w-2xl mb-10 leading-relaxed font-medium">
-          "I build smart bots, automation systems, and modern websites."
-        </p>
-        
-        <div className="flex flex-wrap gap-4">
-          <a href="#projects" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 px-8 py-4 rounded-full font-semibold transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 flex items-center gap-2">
-            View Projects
-          </a>
-          <a href="#contact" className="bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-700 dark:text-emerald-400 px-8 py-4 rounded-full font-semibold transition-all flex items-center gap-2">
-            Contact Me
-          </a>
-          <a href="/cv.txt" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-4 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
-            <Download className="w-5 h-5" /> Download CV
-          </a>
-        </div>
-      </motion.div>
-    </section>
-  );
-};
+// ─── TYPEWRITER ──────────────────────────────────────────────────────────────
 
-const About = () => {
-  return (
-    <section id="about" className="py-24 bg-zinc-50 dark:bg-zinc-900/50 border-y border-zinc-200 dark:border-zinc-800/50">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="max-w-3xl"
-        >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-8 text-zinc-900 dark:text-white flex items-center gap-4">
-            <Cpu className="w-8 h-8 text-emerald-500" /> About Me
-          </h2>
-          <div className="space-y-6 text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg md:text-xl">
-            <p>
-              I am a self-driven and passionate <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">Python Developer and Web Designer</strong> with hands-on experience building automation bots, trading tools, and portfolio websites.
-            </p>
-            <p>
-              Skilled in developing real-world projects using Python and deploying applications using modern tools. My expertise spans across <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">automation, APIs, and web design</strong>, with a growing focus on scalable web solutions.
-            </p>
-            <p>
-              Currently, I am expanding my experience as a <strong className="text-zinc-900 dark:text-zinc-200 font-semibold">Freelance Developer</strong>, offering Python automation and bot development services while continuously learning and adapting to new technologies.
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const Skills = () => {
-  return (
-    <section id="skills" className="py-24 px-6 max-w-7xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-12 text-zinc-900 dark:text-white text-center">Technical Arsenal</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {SKILLS.map((skill, index) => (
-            <div key={index} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl">
-                  {skill.icon}
-                </div>
-                <h3 className="font-semibold text-lg text-zinc-900 dark:text-zinc-100">{skill.name}</h3>
-              </div>
-              <div className="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-2.5 mb-1 overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${skill.progress}%` }}
-                  transition={{ duration: 1, delay: 0.2 }}
-                  viewport={{ once: true }}
-                  className="bg-emerald-500 h-2.5 rounded-full"
-                ></motion.div>
-              </div>
-              <div className="text-right text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                {skill.progress}%
-              </div>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-    </section>
-  );
-};
-
-const Projects = () => {
-  return (
-    <section id="projects" className="py-24 bg-zinc-50 dark:bg-zinc-900/30 border-y border-zinc-200 dark:border-zinc-800/50">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-zinc-900 dark:text-white">Featured Projects</h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl">A selection of my best work in automation, bots, and web development.</p>
-            </div>
-            <a href="https://github.com/Manu-del-source" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
-              View more on GitHub <Github className="w-5 h-5" />
-            </a>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {PROJECTS.map((project, index) => (
-              <motion.div 
-                key={index}
-                whileHover={{ y: -5 }}
-                className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-              >
-                <div className="aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-800 relative">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 gap-3">
-                    {project.link && (
-                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-zinc-800">
-                        <Github className="w-4 h-4" /> Code
-                      </a>
-                    )}
-                    {project.liveLink && (
-                      <a href={project.liveLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-emerald-600">
-                        <ExternalLink className="w-4 h-4" /> Live Demo
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <div className="p-8">
-                  <h3 className="font-display text-2xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{project.title}</h3>
-                  <p className="text-zinc-600 dark:text-zinc-400 mb-6 line-clamp-3">{project.description}</p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-full border border-zinc-200 dark:border-zinc-700">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    linkedin: '',
-    message: ''
-  });
-  const [errors, setErrors] = useState({
-    email: '',
-    linkedin: '',
-    message: ''
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = { email: '', linkedin: '', message: '' };
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-      isValid = false;
-    }
-
-    if (formData.linkedin && !/^https?:\/\/(www\.)?linkedin\.com\/.*$/.test(formData.linkedin)) {
-      newErrors.linkedin = 'Please enter a valid LinkedIn profile URL';
-      isValid = false;
-    }
-
-    if (!formData.message) {
-      newErrors.message = 'Message is required';
-      isValid = false;
-    } else if (formData.message.length < 10) {
-      newErrors.message = 'Message must be at least 10 characters long';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setIsSubmitted(true);
-      setFormData({ email: '', linkedin: '', message: '' });
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-    if (errors[id as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [id]: '' }));
-    }
-  };
-
-  return (
-    <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="text-center mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 text-zinc-900 dark:text-white">Ready to start a project?</h2>
-          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">
-            I'm available for freelance work. Reach out to me via email, messaging apps, or find me on freelance platforms.
-          </p>
-        </motion.div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-        {/* Contact Form */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-3xl shadow-sm"
-        >
-          <h3 className="font-display text-2xl font-bold mb-6 text-zinc-900 dark:text-white">Send me a message</h3>
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {isSubmitted && (
-              <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl text-sm font-medium border border-emerald-200 dark:border-emerald-500/20">
-                Thank you! Your message has been sent successfully.
-              </div>
-            )}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your@email.com" 
-                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow`} 
-              />
-              {errors.email && <p className="mt-1.5 text-sm text-red-500">{errors.email}</p>}
-            </div>
-            <div>
-              <label htmlFor="linkedin" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">LinkedIn Profile (Optional)</label>
-              <input 
-                type="url" 
-                id="linkedin" 
-                value={formData.linkedin}
-                onChange={handleChange}
-                placeholder="https://linkedin.com/in/yourprofile" 
-                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.linkedin ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow`} 
-              />
-              {errors.linkedin && <p className="mt-1.5 text-sm text-red-500">{errors.linkedin}</p>}
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Message</label>
-              <textarea 
-                id="message" 
-                rows={4} 
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Tell me about your project..." 
-                className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500'} focus:outline-none focus:ring-2 dark:text-white transition-shadow resize-none`}
-              ></textarea>
-              {errors.message && <p className="mt-1.5 text-sm text-red-500">{errors.message}</p>}
-            </div>
-            <motion.button 
-              type="submit" 
-              animate={isSubmitted ? { scale: [1, 1.05, 1] } : {}}
-              transition={{ duration: 0.3 }}
-              className={`w-full ${isSubmitted ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400'} text-white dark:text-zinc-950 px-8 py-4 rounded-xl font-semibold transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2`}
-            >
-              {isSubmitted ? "Message Sent!" : "Send Message"} <Send className="w-4 h-4" />
-            </motion.button>
-          </form>
-        </motion.div>
-
-        {/* Direct Contact Links */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start"
-        >
-          <a 
-            href="https://wa.me/254726090372" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-emerald-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/10 rounded-2xl flex items-center justify-center transition-colors">
-              <MessageCircle className="w-6 h-6 text-emerald-600 dark:text-zinc-400 group-hover:text-emerald-500 transition-colors" />
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">WhatsApp</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">+254 726 090 372</p>
-            </div>
-          </a>
-
-          <a 
-            href="https://t.me/Bohsell" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-blue-50 dark:bg-zinc-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-500/10 rounded-2xl flex items-center justify-center transition-colors">
-              <Send className="w-6 h-6 text-blue-600 dark:text-zinc-400 group-hover:text-blue-500 transition-colors" />
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">Telegram</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">@Bohsell</p>
-            </div>
-          </a>
-
-          <a 
-            href="mailto:kiptooe213@gmail.com" 
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-rose-500/50 dark:hover:border-rose-500/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-rose-50 dark:bg-zinc-800 group-hover:bg-rose-100 dark:group-hover:bg-rose-500/10 rounded-2xl flex items-center justify-center transition-colors">
-              <Mail className="w-6 h-6 text-rose-600 dark:text-zinc-400 group-hover:text-rose-500 transition-colors" />
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">Email</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">kiptooe213@gmail.com</p>
-            </div>
-          </a>
-
-          <a 
-            href="https://www.linkedin.com/in/emmanuel-kiptoo-aa5b383a8" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 p-6 rounded-3xl transition-all border border-zinc-200 dark:border-zinc-800 hover:border-blue-600/50 dark:hover:border-blue-600/50 shadow-sm hover:shadow-md group"
-          >
-            <div className="w-12 h-12 bg-blue-50 dark:bg-zinc-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-600/10 rounded-2xl flex items-center justify-center transition-colors">
-              <Linkedin className="w-6 h-6 text-blue-700 dark:text-zinc-400 group-hover:text-blue-600 transition-colors" />
-            </div>
-            <div className="text-center">
-              <h3 className="font-bold text-zinc-900 dark:text-white">LinkedIn</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-1">Connect</p>
-            </div>
-          </a>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const Footer = () => {
-  return (
-    <footer className="py-10 border-t border-zinc-200 dark:border-zinc-800/50 bg-white dark:bg-zinc-950 text-center px-6">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="text-left">
-          <a href="#home" className="font-display font-bold text-xl tracking-tighter text-zinc-900 dark:text-zinc-50 block mb-2">
-            E. KIPTOO<span className="text-emerald-500">.</span>
-          </a>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-            © {new Date().getFullYear()} Emmanuel Kiptoo Yegon. All rights reserved.
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <a href="https://github.com/Manu-del-source" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-400 transition-colors">
-            <Github className="w-5 h-5" />
-          </a>
-          <a href="https://www.linkedin.com/in/emmanuel-kiptoo-aa5b383a8" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-500/20 dark:hover:text-blue-400 transition-colors">
-            <Linkedin className="w-5 h-5" />
-          </a>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-export default function App() {
-  const [isDark, setIsDark] = useState(true);
+function TypeWriter({ words }: { words: string[] }) {
+  const [displayed, setDisplayed] = useState('');
+  const [wi, setWi] = useState(0);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
+    const word = words[wi];
+    let timer: ReturnType<typeof setTimeout>;
+    if (!deleting) {
+      if (displayed.length < word.length) {
+        timer = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), 75);
+      } else {
+        timer = setTimeout(() => setDeleting(true), 1800);
+      }
     } else {
-      document.documentElement.classList.remove('dark');
+      if (displayed.length > 0) {
+        timer = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 45);
+      } else {
+        setDeleting(false);
+        setWi((wi + 1) % words.length);
+      }
     }
-  }, [isDark]);
-
-  const toggleTheme = () => setIsDark(!isDark);
+    return () => clearTimeout(timer);
+  }, [displayed, deleting, wi, words]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
-      <Navbar isDark={isDark} toggleTheme={toggleTheme} />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
+    <span style={{ color: '#bf5fff', fontWeight: 500 }}>
+      {displayed}<span className="animate-blink" style={{ color: '#0ff' }}>|</span>
+    </span>
+  );
+}
+
+// ─── SECTION REVEAL ──────────────────────────────────────────────────────────
+
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ─── BADGE ───────────────────────────────────────────────────────────────────
+
+const BADGE_STYLES = {
+  cyan:   { bg: 'rgba(0,255,255,0.1)',   color: '#0ff',    border: 'rgba(0,255,255,0.3)'   },
+  green:  { bg: 'rgba(0,230,100,0.1)',   color: '#00e664', border: 'rgba(0,230,100,0.3)'   },
+  purple: { bg: 'rgba(191,95,255,0.1)',  color: '#bf5fff', border: 'rgba(191,95,255,0.3)'  },
+  yellow: { bg: 'rgba(255,233,77,0.1)',  color: '#ffe94d', border: 'rgba(255,233,77,0.3)'  },
+  pink:   { bg: 'rgba(255,77,172,0.1)',  color: '#ff4dac', border: 'rgba(255,77,172,0.3)'  },
+};
+
+function Badge({ label, color }: { label: string; color: keyof typeof BADGE_STYLES }) {
+  const s = BADGE_STYLES[color];
+  return (
+    <span style={{
+      fontFamily: 'var(--font-mono)', fontSize: '0.65rem', padding: '3px 9px',
+      borderRadius: '999px', background: s.bg, color: s.color,
+      border: `1px solid ${s.border}`,
+    }}>
+      {label}
+    </span>
+  );
+}
+
+// ─── NAV ─────────────────────────────────────────────────────────────────────
+
+function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState('');
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+      const ids = ['skills', 'projects', 'experience', 'contact'];
+      let cur = '';
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+      });
+      setActive(cur);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '1rem 2rem',
+      background: scrolled ? 'rgba(6,6,16,0.85)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(14px)' : 'none',
+      borderBottom: scrolled ? '1px solid rgba(120,120,200,0.15)' : '1px solid transparent',
+      transition: 'all 0.3s',
+    }}>
+      <a href="#" style={{
+        fontFamily: 'var(--font-mono)', fontSize: '1.05rem', fontWeight: 600,
+        background: 'linear-gradient(90deg,#0ff,#bf5fff)',
+        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+        textDecoration: 'none',
+      }}>
+        manu.dev
+      </a>
+
+      {/* desktop links */}
+      <ul style={{ display: 'flex', gap: '1.8rem', listStyle: 'none', margin: 0, padding: 0 }} className="hidden-mobile">
+        {NAV_LINKS.map(l => (
+          <li key={l.name}>
+            <a href={l.href} style={{
+              color: active === l.href.slice(1) ? '#0ff' : '#7878a8',
+              textDecoration: 'none', fontSize: '0.82rem',
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => { (e.target as HTMLAnchorElement).style.color = '#0ff'; }}
+            onMouseLeave={e => { (e.target as HTMLAnchorElement).style.color = active === l.href.slice(1) ? '#0ff' : '#7878a8'; }}
+            >
+              {l.name}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href="#contact" style={{
+            padding: '0.5rem 1.2rem', borderRadius: '6px', fontSize: '0.82rem', fontWeight: 600,
+            background: 'linear-gradient(135deg,#0ff,#bf5fff)',
+            color: '#060610', textDecoration: 'none',
+            transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={e => { (e.target as HTMLAnchorElement).style.opacity = '0.85'; }}
+          onMouseLeave={e => { (e.target as HTMLAnchorElement).style.opacity = '1'; }}
+          >
+            Hire Me
+          </a>
+        </li>
+      </ul>
+
+      {/* mobile burger */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{ background: 'none', border: 'none', color: '#e8e8f8', cursor: 'pointer', display: 'none' }}
+        className="show-mobile"
+        aria-label="Toggle menu"
+      >
+        {open ? <X size={22} /> : <Menu size={22} />}
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            style={{
+              position: 'absolute', top: '100%', left: 0, right: 0,
+              background: '#0d0d1f',
+              borderBottom: '1px solid rgba(120,120,200,0.2)',
+              padding: '1rem 2rem', display: 'flex', flexDirection: 'column', gap: '1rem',
+            }}
+          >
+            {NAV_LINKS.map(l => (
+              <a key={l.name} href={l.href}
+                onClick={() => setOpen(false)}
+                style={{ color: '#e8e8f8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500 }}
+              >
+                {l.name}
+              </a>
+            ))}
+            <a href="#contact" onClick={() => setOpen(false)} style={{
+              padding: '0.6rem 1.2rem', borderRadius: '6px', textAlign: 'center', fontWeight: 600,
+              background: 'linear-gradient(135deg,#0ff,#bf5fff)', color: '#060610', textDecoration: 'none',
+            }}>
+              Hire Me
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+}
+
+// ─── HERO ────────────────────────────────────────────────────────────────────
+
+function CountUp({ to, suffix = '', duration = 1600 }: { to: number; suffix?: string; duration?: number }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView) return;
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      setVal(Math.floor(p * to));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, to, duration]);
+
+  return <span ref={ref}>{val}{suffix}</span>;
+}
+
+function Hero() {
+  const ROLES = ['M-Pesa Integrations', 'SaaS Platforms', 'AI Trading Bots', 'Real-Time Systems', 'Kenyan Fintech'];
+
+  return (
+    <section id="home" style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      justifyContent: 'center', padding: '6rem 2rem 4rem',
+      maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1,
+    }}>
+
+      {/* Decorative rotating ring */}
+      <div style={{
+        position: 'absolute', right: '5%', top: '20%',
+        width: '320px', height: '320px', opacity: 0.07, pointerEvents: 'none',
+      }} className="hidden-mobile">
+        <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-spin-slow">
+          <circle cx="160" cy="160" r="155" stroke="url(#rg)" strokeWidth="1" strokeDasharray="8 6" />
+          <circle cx="160" cy="160" r="110" stroke="url(#rg2)" strokeWidth="0.5" strokeDasharray="4 8" />
+          <defs>
+            <linearGradient id="rg" x1="0" y1="0" x2="320" y2="320" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#0ff" /><stop offset="1" stopColor="#bf5fff" />
+            </linearGradient>
+            <linearGradient id="rg2" x1="0" y1="320" x2="320" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#ff4dac" /><stop offset="1" stopColor="#ffe94d" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+        style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#0ff', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '1.2rem' }}
+      >
+        // Available for freelance &amp; contracts
+      </motion.p>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+        style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', fontWeight: 700, lineHeight: 1.05, marginBottom: '1rem' }}
+      >
+        Emmanuel<br />
+        <span className="grad-text">Kiptoo</span>
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.34 }}
+        style={{ fontSize: 'clamp(1rem, 2.5vw, 1.4rem)', color: '#7878a8', marginBottom: '1.5rem' }}
+      >
+        Full-Stack Developer &nbsp;·&nbsp; <TypeWriter words={ROLES} />
+      </motion.p>
+
+      <motion.p
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.46 }}
+        style={{ color: '#7878a8', maxWidth: '520px', lineHeight: 1.75, marginBottom: '2.5rem', fontSize: '1rem' }}
+      >
+        Building production-grade platforms for the African market — from SaaS dashboards to AI trading engines. Based in Eldoret, Kenya.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.58 }}
+        style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}
+      >
+        <a href="#projects" style={{
+          padding: '0.75rem 1.8rem', borderRadius: '6px', fontWeight: 600, fontSize: '0.9rem',
+          background: 'linear-gradient(135deg,#0ff,#bf5fff)', color: '#060610',
+          textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 24px rgba(0,255,255,0.2)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = ''; (e.currentTarget as HTMLAnchorElement).style.boxShadow = ''; }}
+        >
+          View Projects <ArrowRight size={16} />
+        </a>
+        <a href="https://github.com/Manu-del-source" target="_blank" rel="noopener noreferrer" style={{
+          padding: '0.75rem 1.8rem', borderRadius: '6px', fontWeight: 600, fontSize: '0.9rem',
+          background: 'transparent', color: '#bf5fff',
+          border: '1.5px solid #bf5fff', textDecoration: 'none',
+          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+          transition: 'background 0.2s',
+        }}
+        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(191,95,255,0.1)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
+        >
+          <Github size={16} /> GitHub
+        </a>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.72 }}
+        style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}
+      >
+        {[
+          { num: <><CountUp to={12} suffix="+" /></>, label: 'Projects built' },
+          { num: '3+', label: 'Years building' },
+          { num: 'KE', label: 'Based in Kenya' },
+        ].map(s => (
+          <div key={s.label}>
+            <div style={{
+              fontSize: '1.8rem', fontWeight: 700,
+              background: 'linear-gradient(90deg,#0ff,#bf5fff)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>{s.num}</div>
+            <div style={{ fontSize: '0.72rem', color: '#7878a8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</div>
+          </div>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+// ─── DIVIDER ─────────────────────────────────────────────────────────────────
+
+function Divider() {
+  return (
+    <div style={{
+      width: '100%', height: '1px',
+      background: 'linear-gradient(90deg,transparent,#bf5fff,#0ff,transparent)',
+      opacity: 0.25,
+    }} />
+  );
+}
+
+// ─── MARQUEE ─────────────────────────────────────────────────────────────────
+
+function TechMarquee() {
+  const doubled = [...TECH_MARQUEE, ...TECH_MARQUEE];
+  return (
+    <div style={{ overflow: 'hidden', padding: '1.5rem 0', borderTop: '1px solid rgba(120,120,200,0.1)', borderBottom: '1px solid rgba(120,120,200,0.1)', background: '#0d0d1f', position: 'relative', zIndex: 1 }}>
+      <div className="animate-marquee" style={{ display: 'flex', gap: '2rem', width: 'max-content' }}>
+        {doubled.map((t, i) => (
+          <span key={i} style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#7878a8',
+            display: 'inline-flex', alignItems: 'center', gap: '0.6rem', whiteSpace: 'nowrap',
+          }}>
+            <span style={{ color: '#bf5fff', opacity: 0.6 }}>✦</span> {t}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
 
+// ─── SKILLS ──────────────────────────────────────────────────────────────────
+
+const TAG_COLORS = {
+  cyan:   { bg: 'rgba(0,255,255,0.07)',  color: '#0ff',    border: 'rgba(0,255,255,0.18)'  },
+  purple: { bg: 'rgba(191,95,255,0.07)', color: '#bf5fff', border: 'rgba(191,95,255,0.18)' },
+  pink:   { bg: 'rgba(255,77,172,0.07)', color: '#ff4dac', border: 'rgba(255,77,172,0.18)' },
+  yellow: { bg: 'rgba(255,233,77,0.07)', color: '#ffe94d', border: 'rgba(255,233,77,0.18)' },
+};
+
+function Skills() {
+  return (
+    <section id="skills" style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <Reveal>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#0ff', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>// what I work with</p>
+        <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 700, marginBottom: '0.8rem' }}>
+          Technical <span className="grad-text-2">Stack</span>
+        </h2>
+        <p style={{ color: '#7878a8', fontSize: '1rem', maxWidth: '480px', lineHeight: 1.7, marginBottom: '3rem' }}>
+          End-to-end development across web, mobile, payments, and AI — built and shipped on Termux and deployed live.
+        </p>
+      </Reveal>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: '1.2rem' }}>
+        {SKILL_GROUPS.map((g, i) => {
+          const tc = TAG_COLORS[g.color];
+          return (
+            <Reveal key={g.title} delay={i * 0.07}>
+              <motion.div
+                whileHover={{ y: -4, borderColor: 'rgba(191,95,255,0.45)' }}
+                style={{
+                  background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
+                  borderRadius: '12px', padding: '1.4rem', transition: 'border-color 0.3s',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.9rem', color: tc.color }}>
+                  {g.icon}
+                  <span style={{ fontWeight: 600, fontSize: '0.9rem', color: '#e8e8f8' }}>{g.title}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                  {g.tags.map(t => (
+                    <span key={t} style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '3px 9px',
+                      borderRadius: '4px', background: tc.bg, color: tc.color, border: `1px solid ${tc.border}`,
+                    }}>{t}</span>
+                  ))}
+                </div>
+              </motion.div>
+            </Reveal>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+// ─── PROJECTS ────────────────────────────────────────────────────────────────
+
+function Projects() {
+  return (
+    <section id="projects" style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <Reveal>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#0ff', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>// things I've shipped</p>
+        <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 700, marginBottom: '0.8rem' }}>
+          Featured <span className="grad-text-2">Projects</span>
+        </h2>
+        <p style={{ color: '#7878a8', fontSize: '1rem', maxWidth: '480px', lineHeight: 1.7, marginBottom: '3rem' }}>
+          Production-level builds covering SaaS, fintech, AI, and marketplaces — all targeting real Kenyan and African market needs.
+        </p>
+      </Reveal>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '1.4rem' }}>
+        {PROJECTS.map((p, i) => (
+          <Reveal key={p.title} delay={i * 0.06}>
+            <motion.div
+              whileHover={{ y: -6 }}
+              style={{
+                background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
+                borderRadius: '14px', padding: '1.6rem', position: 'relative', overflow: 'hidden',
+                height: '100%', display: 'flex', flexDirection: 'column',
+              }}
+            >
+              {/* top accent bar on hover via CSS trick — use a pseudo via JS */}
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                background: 'linear-gradient(90deg,#0ff,#bf5fff,#ff4dac)',
+                opacity: 0.8,
+              }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <span style={{ fontSize: '1.4rem' }}>{p.icon}</span>
+                  <span style={{ fontWeight: 600, fontSize: '1rem', color: '#e8e8f8' }}>{p.title}</span>
+                </div>
+                <Badge label={p.badge} color={p.badgeColor} />
+              </div>
+
+              <p style={{ fontSize: '0.87rem', color: '#7878a8', lineHeight: 1.65, marginBottom: '1.2rem', flex: 1 }}>{p.description}</p>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                  {p.tags.map(t => (
+                    <span key={t} style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.66rem', padding: '2px 7px',
+                      borderRadius: '4px', background: '#12122a', color: '#7878a8',
+                      border: '1px solid rgba(120,120,200,0.18)',
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <a href={p.link} target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#7878a8', marginLeft: '0.8rem', flexShrink: 0, transition: 'color 0.2s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#0ff'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#7878a8'; }}
+                >
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            </motion.div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── EXPERIENCE ──────────────────────────────────────────────────────────────
+
+function Experience() {
+  return (
+    <section id="experience" style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <Reveal>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#0ff', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>// my journey</p>
+        <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 700, marginBottom: '0.8rem' }}>
+          Experience &amp; <span className="grad-text-2">Background</span>
+        </h2>
+        <p style={{ color: '#7878a8', fontSize: '1rem', maxWidth: '480px', lineHeight: 1.7, marginBottom: '3rem' }}>
+          Independent builder shipping real products for the Kenyan and African tech market.
+        </p>
+      </Reveal>
+
+      <div style={{ position: 'relative', paddingLeft: '2rem' }}>
+        {/* timeline line */}
+        <div style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: '1px',
+          background: 'linear-gradient(180deg,#0ff,#bf5fff,#ff4dac)',
+          opacity: 0.5,
+        }} />
+
+        {EXPERIENCE.map((e, i) => (
+          <Reveal key={e.role} delay={i * 0.1}>
+            <div style={{ position: 'relative', marginBottom: '2.5rem' }}>
+              {/* dot */}
+              <div style={{
+                position: 'absolute', left: '-2.42rem', top: '0.4rem',
+                width: '10px', height: '10px', borderRadius: '50%',
+                background: '#bf5fff', boxShadow: '0 0 12px #bf5fff',
+              }} />
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#0ff', letterSpacing: '0.08em', marginBottom: '0.25rem' }}>{e.period}</p>
+              <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.15rem', color: '#e8e8f8' }}>{e.role}</p>
+              <p style={{ fontSize: '0.85rem', color: '#bf5fff', marginBottom: '0.5rem' }}>{e.company}</p>
+              <p style={{ fontSize: '0.87rem', color: '#7878a8', lineHeight: 1.7 }}>{e.desc}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── CONTACT ─────────────────────────────────────────────────────────────────
+
+function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    setSent(true);
+    setTimeout(() => setSent(false), 3500);
+  }, []);
+
+  const LINKS = [
+    { icon: <MessageCircle size={18} />, label: 'WhatsApp', sub: '+254 726 090 372', href: 'https://wa.me/254726090372', color: '#00e664' },
+    { icon: <Send size={18} />, label: 'Telegram', sub: '@Bohsell', href: 'https://t.me/Bohsell', color: '#2aabee' },
+    { icon: <Mail size={18} />, label: 'Email', sub: 'kiptooe213@gmail.com', href: 'mailto:kiptooe213@gmail.com', color: '#ff4dac' },
+    { icon: <Github size={18} />, label: 'GitHub', sub: 'Manu-del-source', href: 'https://github.com/Manu-del-source', color: '#e8e8f8' },
+    { icon: <Linkedin size={18} />, label: 'LinkedIn', sub: 'Emmanuel Kiptoo', href: 'https://www.linkedin.com/in/emmanuel-kiptoo-aa5b383a8', color: '#0a66c2' },
+    { icon: <MapPin size={18} />, label: 'Location', sub: 'Eldoret, Kenya', href: '#', color: '#ffe94d' },
+  ];
+
+  const inputStyle: React.CSSProperties = {
+    background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.2)', borderRadius: '8px',
+    padding: '0.75rem 1rem', color: '#e8e8f8', fontFamily: 'var(--font-sans)', fontSize: '0.9rem',
+    outline: 'none', width: '100%', transition: 'border-color 0.2s',
+  };
+
+  return (
+    <section id="contact" style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <Reveal>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#0ff', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>// let's build something</p>
+        <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 700, marginBottom: '0.8rem' }}>
+          Get in <span className="grad-text-2">Touch</span>
+        </h2>
+        <p style={{ color: '#7878a8', fontSize: '1rem', maxWidth: '480px', lineHeight: 1.7, marginBottom: '3rem' }}>
+          Open to freelance contracts, SaaS collaborations, and consulting for African-market fintech and web projects.
+        </p>
+      </Reveal>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '2rem', alignItems: 'start' }}>
+
+        {/* Contact links */}
+        <Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '0.75rem' }}>
+            {LINKS.map(l => (
+              <motion.a
+                key={l.label}
+                href={l.href}
+                target={l.href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                whileHover={{ y: -3, borderColor: 'rgba(191,95,255,0.4)' }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
+                  borderRadius: '10px', padding: '0.9rem 1rem',
+                  textDecoration: 'none', color: '#e8e8f8',
+                }}
+              >
+                <div style={{
+                  width: '36px', height: '36px', borderRadius: '8px',
+                  background: '#12122a', border: '1px solid rgba(120,120,200,0.18)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: l.color, flexShrink: 0,
+                }}>
+                  {l.icon}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{l.label}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#7878a8' }}>{l.sub}</div>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Form */}
+        <Reveal delay={0.1}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <input
+              type="text" placeholder="Your name" value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })}
+              style={inputStyle}
+              onFocus={e => { (e.target as HTMLInputElement).style.borderColor = '#bf5fff'; }}
+              onBlur={e => { (e.target as HTMLInputElement).style.borderColor = 'rgba(120,120,200,0.2)'; }}
+            />
+            <input
+              type="email" placeholder="Your email" value={form.email}
+              onChange={e => setForm({ ...form, email: e.target.value })}
+              style={inputStyle}
+              onFocus={e => { (e.target as HTMLInputElement).style.borderColor = '#bf5fff'; }}
+              onBlur={e => { (e.target as HTMLInputElement).style.borderColor = 'rgba(120,120,200,0.2)'; }}
+            />
+            <textarea
+              placeholder="Tell me about your project..." value={form.message}
+              onChange={e => setForm({ ...form, message: e.target.value })}
+              rows={5}
+              style={{ ...inputStyle, resize: 'none' }}
+              onFocus={e => { (e.target as HTMLTextAreaElement).style.borderColor = '#bf5fff'; }}
+              onBlur={e => { (e.target as HTMLTextAreaElement).style.borderColor = 'rgba(120,120,200,0.2)'; }}
+            />
+            <motion.button
+              type="submit"
+              whileTap={{ scale: 0.97 }}
+              style={{
+                padding: '0.8rem 1.8rem', borderRadius: '8px', fontWeight: 600,
+                fontSize: '0.9rem', border: 'none', cursor: 'pointer',
+                background: sent
+                  ? 'linear-gradient(135deg,#00e664,#00b8ff)'
+                  : 'linear-gradient(135deg,#0ff,#bf5fff)',
+                color: '#060610',
+                display: 'flex', alignItems: 'center', gap: '0.5rem',
+                transition: 'background 0.4s',
+                alignSelf: 'flex-start',
+              }}
+            >
+              {sent ? '✓ Message sent!' : <><Send size={16} /> Send Message</>}
+            </motion.button>
+          </form>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ─── FOOTER ──────────────────────────────────────────────────────────────────
+
+function Footer() {
+  return (
+    <footer style={{
+      borderTop: '1px solid rgba(120,120,200,0.15)',
+      padding: '2rem', textAlign: 'center',
+      color: '#7878a8', fontSize: '0.8rem',
+      background: '#0d0d1f', position: 'relative', zIndex: 1,
+    }}>
+      <p>
+        Designed &amp; built by{' '}
+        <span style={{ background: 'linear-gradient(90deg,#0ff,#bf5fff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Emmanuel Kiptoo
+        </span>
+        {' '}· Eldoret, Kenya · 2025
+      </p>
+      <p style={{ marginTop: '0.4rem', fontSize: '0.72rem', opacity: 0.7 }}>
+        React 19 + TypeScript + Vite · Deployed on Vercel
+      </p>
+    </footer>
+  );
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  return (
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      <ParticleCanvas />
+      <Navbar />
+      <main>
+        <Hero />
+        <TechMarquee />
+        <Divider />
+        <Skills />
+        <Divider />
+        <Projects />
+        <Divider />
+        <Experience />
+        <Divider />
+        <Contact />
+      </main>
+      <Footer />
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hidden-mobile { display: none !important; }
+          .show-mobile   { display: block !important; }
+        }
+        @media (min-width: 641px) {
+          .show-mobile { display: none !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
