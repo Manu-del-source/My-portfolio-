@@ -449,24 +449,21 @@ function CountUp({ to, suffix = '', duration = 1600 }: { to: number; suffix?: st
   return <span ref={ref}>{val}{suffix}</span>;
 }
 
-function Hero() {
-  const ROLES = ['M-Pesa Integrations', 'SaaS Platforms', 'AI Trading Bots', 'Real-Time Systems', 'Kenyan Fintech'];
-
+function HeroPortrait() {
   return (
-    <section id="home" style={{
-      minHeight: '100vh', display: 'flex', flexDirection: 'column',
-      justifyContent: 'center', padding: '6rem 2rem 4rem',
-      maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1,
-    }}>
-
-      {/* Decorative rotating ring */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.4, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      style={{ position: 'relative', width: 'min(320px, 75vw)', flexShrink: 0, margin: '0 auto' }}
+    >
+      {/* rotating ring behind portrait */}
       <div style={{
-        position: 'absolute', right: '5%', top: '20%',
-        width: '320px', height: '320px', opacity: 0.07, pointerEvents: 'none',
-      }} className="hidden-mobile">
-        <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-spin-slow">
+        position: 'absolute', inset: '-28px', pointerEvents: 'none', opacity: 0.55,
+      }}>
+        <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-spin-slow" style={{ width: '100%', height: '100%' }}>
           <circle cx="160" cy="160" r="155" stroke="url(#rg)" strokeWidth="1" strokeDasharray="8 6" />
-          <circle cx="160" cy="160" r="110" stroke="url(#rg2)" strokeWidth="0.5" strokeDasharray="4 8" />
+          <circle cx="160" cy="160" r="140" stroke="url(#rg2)" strokeWidth="0.5" strokeDasharray="4 8" />
           <defs>
             <linearGradient id="rg" x1="0" y1="0" x2="320" y2="320" gradientUnits="userSpaceOnUse">
               <stop stopColor="#0ff" /><stop offset="1" stopColor="#bf5fff" />
@@ -477,6 +474,68 @@ function Hero() {
           </defs>
         </svg>
       </div>
+
+      {/* glow behind image */}
+      <div style={{
+        position: 'absolute', inset: '10%',
+        background: 'radial-gradient(circle, rgba(191,95,255,0.35) 0%, rgba(0,255,255,0.12) 55%, transparent 75%)',
+        filter: 'blur(30px)', pointerEvents: 'none',
+      }} />
+
+      <div className="animate-float" style={{
+        position: 'relative', borderRadius: '50%', overflow: 'hidden',
+        aspectRatio: '1 / 1',
+        border: '2px solid rgba(0,255,255,0.45)',
+        boxShadow: '0 0 40px rgba(0,255,255,0.18), 0 0 80px rgba(191,95,255,0.15)',
+        background: '#0d0d1f',
+      }}>
+        <img
+          src="/images/emmanuel-headshot.png"
+          alt="Emmanuel Kiptoo — Full-Stack Developer"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+        />
+        {/* subtle color wash to blend with theme */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(180deg, transparent 55%, rgba(6,6,16,0.55) 100%)',
+          pointerEvents: 'none',
+        }} />
+      </div>
+
+      {/* status chip */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}
+        style={{
+          position: 'absolute', bottom: '4px', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap',
+          background: 'rgba(13,13,31,0.9)', backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(0,230,100,0.35)', borderRadius: '999px',
+          padding: '0.4rem 0.9rem', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#00e664',
+        }}
+      >
+        <span className="animate-pulseGlow" style={{
+          width: '7px', height: '7px', borderRadius: '50%',
+          background: '#00e664', boxShadow: '0 0 8px #00e664', display: 'inline-block',
+        }} />
+        Open to work
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function Hero() {
+  const ROLES = ['M-Pesa Integrations', 'SaaS Platforms', 'AI Trading Bots', 'Real-Time Systems', 'Kenyan Fintech'];
+
+  return (
+    <section id="home" style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center',
+      padding: '7rem 2rem 4rem',
+      maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1,
+    }}>
+    <div className="hero-grid" style={{
+      display: 'flex', alignItems: 'center', gap: '3.5rem', width: '100%',
+    }}>
+    <div style={{ flex: 1, minWidth: 0 }}>
 
       <motion.p
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
@@ -555,6 +614,10 @@ function Hero() {
           </div>
         ))}
       </motion.div>
+    </div>
+
+    <HeroPortrait />
+    </div>
     </section>
   );
 }
@@ -930,6 +993,9 @@ export default function App() {
         @media (max-width: 640px) {
           .hidden-mobile { display: none !important; }
           .show-mobile   { display: block !important; }
+        }
+        @media (max-width: 900px) {
+          .hero-grid { flex-direction: column-reverse !important; gap: 2.5rem !important; }
         }
         @media (min-width: 641px) {
           .show-mobile { display: none !important; }
