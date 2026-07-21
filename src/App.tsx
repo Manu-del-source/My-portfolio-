@@ -16,6 +16,7 @@ interface Project {
   badgeColor: 'cyan' | 'green' | 'purple' | 'yellow';
   link: string;
   icon: string;
+  image?: string;
 }
 
 interface SkillGroup {
@@ -74,6 +75,26 @@ const SKILL_GROUPS: SkillGroup[] = [
 ];
 
 const PROJECTS: Project[] = [
+  {
+    title: 'Poppies',
+    description: 'Restaurant website for an urban dining spot in Nairobi CBD. Bold editorial design with specials, full menu, gallery, reviews, and table booking — deployed and live on Vercel.',
+    tags: ['React', 'Framer Motion', 'Tailwind', 'Vercel'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://poppies.vercel.app',
+    icon: '🍽️',
+    image: '/images/projects/poppies.png',
+  },
+  {
+    title: 'Lumina',
+    description: 'Immersive event landing page for an audiovisual festival in Nairobi. Animated hero, lineup, ticketing sections, and a glowing neon aesthetic with scrolling marquee — live on Vercel.',
+    tags: ['React', 'Framer Motion', 'CSS Animations', 'Vercel'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://lumina-rosy.vercel.app',
+    icon: '🎆',
+    image: '/images/projects/lumina.png',
+  },
   {
     title: 'MaliHub Kenya',
     description: 'Full-stack second-hand goods marketplace for Kenya. M-Pesa STK Push payments, Supabase PostgreSQL backend, seller dashboards, and a complete Next.js 15 frontend with listing management.',
@@ -739,6 +760,17 @@ function Projects() {
                 background: 'linear-gradient(90deg,#0ff,#bf5fff,#ff4dac)',
                 opacity: 0.8,
               }} />
+
+              {p.image && (
+                <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block', margin: '-0.3rem -0.3rem 1.1rem', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(120,120,200,0.22)' }}>
+                  <img
+                    src={p.image}
+                    alt={`${p.title} — live site preview`}
+                    loading="lazy"
+                    style={{ width: '100%', aspectRatio: '16 / 10', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                  />
+                </a>
+              )}
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
