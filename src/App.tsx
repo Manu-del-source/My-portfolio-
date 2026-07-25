@@ -141,6 +141,7 @@ const PROJECTS: Project[] = [
     link: 'https://streetwear-ke.vercel.app/',
     icon: '👕',
 },
+];
 
 const EXPERIENCE = [
   {
