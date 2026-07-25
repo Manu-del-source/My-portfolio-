@@ -132,24 +132,15 @@ const PROJECTS: Project[] = [
     icon: '🤖',
   },
   {
-    title: 'EduPrime Academy',
-    description: 'School management system with student records, attendance, grading, and M-Pesa fee collection. React/Vite frontend, Node.js + MongoDB backend, JWT auth — packaged as a downloadable product.',
-    tags: ['React', 'Node.js', 'MongoDB', 'M-Pesa', 'JWT'],
-    badge: 'SaaS',
-    badgeColor: 'yellow',
-    link: 'https://github.com/Manu-del-source',
-    icon: '🎓',
-  },
-  {
-    title: 'Deriv Signal Engine',
-    description: 'Real-time synthetic indices signal engine for Deriv — Volatility, Boom/Crash, and 1s indices. WebSocket candle aggregation, multi-strategy SMC/CRT/BOS/SR validation, Telegram delivery, React dashboard.',
-    tags: ['Python', 'WebSockets', 'SMC / BOS', 'Telegram API', 'React'],
-    badge: 'Trading',
-    badgeColor: 'purple',
-    link: 'https://github.com/Manu-del-source',
-    icon: '⚡',
-  },
-];
+    title: 'StreetWear KE',
+    image: '/images/projects/streetwear-ke.jpg',
+    description: 'A modern e-commerce storefront for a Kenyan streetwear brand featuring a premium dark UI, responsive design, product catalog, and WhatsApp ordering.',
+    tags: ['React', 'Vite', 'Tailwind CSS', 'Responsive'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://streetwear-ke.vercel.app/',
+    icon: '👕',
+},
 
 const EXPERIENCE = [
   {
