@@ -114,13 +114,20 @@ const PROJECTS: Project[] = [
     icon: '📈',
   },
   {
-    title: 'WiFiFlow SaaS',
-    description: 'WiFi billing and hotspot management platform for African ISPs, cyber cafes, and hotels. MikroTik router integration, M-Pesa voucher system, captive portal, and a cyberpunk dark UI.',
-    tags: ['Next.js', 'MikroTik API', 'M-Pesa', 'PostgreSQL', 'Tailwind'],
-    badge: 'Live',
-    badgeColor: 'green',
-    link: 'https://github.com/Manu-del-source',
-    icon: '📡',
+    title: 'WiFiFLOW',
+    image: '/images/projects/wififlow.jpg',
+    description: 'A modern WiFi hotspot billing and management platform built for ISPs, hotels, cafés, schools, and businesses. It includes voucher management, customer accounts, billing, usage monitoring, and a responsive admin dashboard.',
+    tags: [
+      'React',
+      'Node.js',
+      'Supabase',
+      'Tailwind CSS',
+      'WiFi Billing'
+     ],
+     badge: 'GitHub',
+     badgeColor: 'blue',
+     link: 'https://github.com/Manu-del-source/wifi-billing-system',
+     icon: '📶',
   },
   {
     title: 'JARVIS AI Assistant',
