@@ -125,7 +125,7 @@ const PROJECTS: Project[] = [
       'WiFi Billing'
      ],
      badge: 'GitHub',
-     badgeColor: 'blue',
+     badgeColor: 'cyan',
      link: 'https://github.com/Manu-del-source/wifi-billing-system',
      icon: '📶',
   },
