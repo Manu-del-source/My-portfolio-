@@ -1,0 +1,34 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index 0ed4f0a..cb31294 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -111,22 +111,13 @@ const PROJECTS: Project[] = [
+     icon: '🤖',
+   },
+   {
+-    title: 'EduPrime Academy',
+-    description: 'School management system with student records, attendance, grading, and M-Pesa fee collection. React/Vite frontend, Node.js + MongoDB backend, JWT auth — packaged as a downloadable product.',
+-    tags: ['React', 'Node.js', 'MongoDB', 'M-Pesa', 'JWT'],
+-    badge: 'SaaS',
+-    badgeColor: 'yellow',
+-    link: 'https://github.com/Manu-del-source',
+-    icon: '🎓',
+-  },
+-  {
+-    title: 'Deriv Signal Engine',
+-    description: 'Real-time synthetic indices signal engine for Deriv — Volatility, Boom/Crash, and 1s indices. WebSocket candle aggregation, multi-strategy SMC/CRT/BOS/SR validation, Telegram delivery, React dashboard.',
+-    tags: ['Python', 'WebSockets', 'SMC / BOS', 'Telegram API', 'React'],
+-    badge: 'Trading',
+-    badgeColor: 'purple',
+-    link: 'https://github.com/Manu-del-source',
+-    icon: '⚡',
++    title: 'StreetWear KE',
++    description: 'E-commerce storefront for a Nairobi streetwear label. Limited-drop catalogue, bold dark-mode design, and WhatsApp-based ordering built for mobile-first shoppers.',
++    tags: ['React', 'Vite', 'Tailwind', 'WhatsApp API'],
++    badge: 'Live',
++    badgeColor: 'green',
++    link: 'https://streetwear-ke.vercel.app/',
++    icon: '👕',
+   },
+ ];
+ 

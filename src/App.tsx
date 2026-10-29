@@ -15,7 +15,6 @@ interface Project {
   badge: string;
   badgeColor: 'cyan' | 'green' | 'purple' | 'yellow';
   link: string;
-  icon: string;
   image?: string;
 }
 
@@ -82,7 +81,6 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://poppies.vercel.app',
-    icon: '🍽️',
     image: '/images/projects/poppies.png',
   },
   {
@@ -92,62 +90,90 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://lumina-rosy.vercel.app',
-    icon: '🎆',
     image: '/images/projects/lumina.png',
   },
   {
     title: 'MaliHub Kenya',
-    description: 'Full-stack second-hand goods marketplace for Kenya. M-Pesa STK Push payments, Supabase PostgreSQL backend, seller dashboards, and a complete Next.js 15 frontend with listing management.',
+    description: 'A full-stack marketplace and e-commerce platform built for Kenya, featuring product discovery, seller onboarding, buyer workflows, and secure M-Pesa STK Push payments.',
     tags: ['Next.js 15', 'Supabase', 'M-Pesa Daraja', 'TypeScript', 'Tailwind'],
     badge: 'Live',
     badgeColor: 'green',
-    link: 'https://github.com/Manu-del-source',
-    icon: '🛒',
+    link: 'https://www.malihubke.online',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/Malihub--kenya',
   },
   {
-    title: 'DollarPrinter AI',
-    description: 'AI-powered automated trading platform with a full technical analysis engine — RSI, MACD, Bollinger Bands, EMA signals. Real-time via Socket.IO, containerised with Docker, persisted via Prisma + Redis.',
-    tags: ['Node.js', 'Express', 'Socket.IO', 'Redis', 'Docker', 'Prisma'],
-    badge: 'Backend',
-    badgeColor: 'purple',
-    link: 'https://github.com/Manu-del-source',
-    icon: '📈',
-  },
-  {
-    title: 'WiFiFlow SaaS',
-    description: 'WiFi billing and hotspot management platform for African ISPs, cyber cafes, and hotels. MikroTik router integration, M-Pesa voucher system, captive portal, and a cyberpunk dark UI.',
-    tags: ['Next.js', 'MikroTik API', 'M-Pesa', 'PostgreSQL', 'Tailwind'],
+    title: 'ZenPOS',
+    description: 'A modern, lightning-fast point-of-sale and business operations system designed for retail and hospitality, supporting offline-first sync, inventory ledgers, and M-Pesa C2B manual till reconciliation.',
+    tags: ['React', 'Django REST', 'PostgreSQL', 'Tailwind', 'POS'],
     badge: 'Live',
     badgeColor: 'green',
-    link: 'https://github.com/Manu-del-source',
-    icon: '📡',
+    link: 'https://zenpos.co.ke/',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/zenpos',
   },
   {
-    title: 'JARVIS AI Assistant',
-    description: 'Iron Man HUD dashboard backed by a Python FastAPI + Claude API engine. Dual-layer SQLite memory, WebSocket real-time comms, and tool-use — built entirely on Termux.',
-    tags: ['Python', 'FastAPI', 'Claude API', 'React', 'SQLite', 'WebSockets'],
-    badge: 'Full-Stack',
+    title: 'SmartBiz365',
+    description: 'Digital agency platform and portfolio showcasing websites, business systems, and AI-powered workflow automation for growing businesses in Kenya.',
+    tags: ['React 19', 'Vite', 'Tailwind CSS', 'Framer Motion'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://smartbiz365.site/',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/smartbiz',
+  },
+
+  {
+    title: 'SecureSight CCTV',
+    description: 'Professional security and surveillance service platform providing a clear path from security enquiries to trusted CCTV installations.',
+    tags: ['React', 'Vite', 'Tailwind CSS', 'Security'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://securesight.smartbiz365.site/',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/SecureSight-CCTV',
+  },
+
+  {
+    title: 'Phikila',
+    description: 'All-in-one school operations platform for African schools managing student records, academics, timetables, finance, and reporting.',
+    tags: ['Next.js', 'Supabase', 'PostgreSQL', 'TypeScript'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://phikila.com',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/Phikila-School-Management-System',
+  },
+  {
+    title: 'MotionBrag',
+    description: 'An AI-agent skill that plans and renders 30-60s promotional videos from a JSON brief using FFmpeg: crossfades and wipes, slide-up titles, shake/glitch/pulse effects, keyframe zooms and BPM-synced cuts.',
+    tags: ['Python', 'FFmpeg', 'Pillow', 'AI Agents'],
+    badge: 'Open Source',
     badgeColor: 'cyan',
-    link: 'https://github.com/Manu-del-source',
-    icon: '🤖',
+    link: 'https://github.com/Manu-del-source/motionbrag',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/motionbrag',
   },
   {
-    title: 'EduPrime Academy',
-    description: 'School management system with student records, attendance, grading, and M-Pesa fee collection. React/Vite frontend, Node.js + MongoDB backend, JWT auth — packaged as a downloadable product.',
-    tags: ['React', 'Node.js', 'MongoDB', 'M-Pesa', 'JWT'],
-    badge: 'SaaS',
-    badgeColor: 'yellow',
-    link: 'https://github.com/Manu-del-source',
-    icon: '🎓',
+    title: 'Modelora',
+    description: 'Free AI Model and Image-to-Video Generator web app: Next.js/TypeScript frontend with FastAPI, PostgreSQL and Redis backend. Image generation, character consistency and signed private downloads.',
+    tags: ['Next.js', 'FastAPI', 'PostgreSQL', 'Redis'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/modelora',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/modelora',
   },
   {
-    title: 'Deriv Signal Engine',
-    description: 'Real-time synthetic indices signal engine for Deriv — Volatility, Boom/Crash, and 1s indices. WebSocket candle aggregation, multi-strategy SMC/CRT/BOS/SR validation, Telegram delivery, React dashboard.',
-    tags: ['Python', 'WebSockets', 'SMC / BOS', 'Telegram API', 'React'],
-    badge: 'Trading',
-    badgeColor: 'purple',
-    link: 'https://github.com/Manu-del-source',
-    icon: '⚡',
+    title: 'AI Security Audit Skill',
+    description: 'Evidence-driven security audit skill with a CLI, 18 hunter playbooks, test fixtures and an adversarial validation step for auditing software repositories.',
+    tags: ['Python', 'Security', 'CLI', 'Claude Skills'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/ai-security-audit',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/ai-security-audit',
+  },
+  {
+    title: 'Frontend UI/UX Skill',
+    description: 'A Claude Code skill for frontend UI/UX review and build guidance, with reference docs, checklists and a validator plus node tests.',
+    tags: ['TypeScript', 'UI/UX', 'Claude Skills'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/frontend-uiux-skill',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/frontend-uiux-skill',
   },
 ];
 
@@ -743,17 +769,40 @@ function Projects() {
           Production-level builds covering SaaS, fintech, AI, and marketplaces — all targeting real Kenyan and African market needs.
         </p>
       </Reveal>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '1.4rem' }}>
-        {PROJECTS.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.06}>
-            <motion.div
-              whileHover={{ y: -6 }}
-              style={{
-                background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
-                borderRadius: '14px', padding: '1.6rem', position: 'relative', overflow: 'hidden',
-                height: '100%', display: 'flex', flexDirection: 'column',
-              }}
-            >
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.12,
+            },
+          },
+        }}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '1.4rem' }}
+      >
+        {PROJECTS.map((p) => (
+          <motion.div
+            key={p.title}
+            variants={{
+              hidden: { opacity: 0, y: 35, scale: 0.96 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+              },
+            }}
+            whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.2 } }}
+            style={{
+              background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
+              borderRadius: '14px', padding: '1.6rem', position: 'relative', overflow: 'hidden',
+              height: '100%', display: 'flex', flexDirection: 'column',
+            }}
+          >
               {/* top accent bar on hover via CSS trick — use a pseudo via JS */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
@@ -774,7 +823,6 @@ function Projects() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <span style={{ fontSize: '1.4rem' }}>{p.icon}</span>
                   <span style={{ fontWeight: 600, fontSize: '1rem', color: '#e8e8f8' }}>{p.title}</span>
                 </div>
                 <Badge label={p.badge} color={p.badgeColor} />
@@ -800,10 +848,9 @@ function Projects() {
                   <ExternalLink size={16} />
                 </a>
               </div>
-            </motion.div>
-          </Reveal>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
