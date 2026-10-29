@@ -730,17 +730,40 @@ function Projects() {
           Production-level builds covering SaaS, fintech, AI, and marketplaces — all targeting real Kenyan and African market needs.
         </p>
       </Reveal>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '1.4rem' }}>
-        {PROJECTS.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.06}>
-            <motion.div
-              whileHover={{ y: -6 }}
-              style={{
-                background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
-                borderRadius: '14px', padding: '1.6rem', position: 'relative', overflow: 'hidden',
-                height: '100%', display: 'flex', flexDirection: 'column',
-              }}
-            >
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.12,
+            },
+          },
+        }}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '1.4rem' }}
+      >
+        {PROJECTS.map((p) => (
+          <motion.div
+            key={p.title}
+            variants={{
+              hidden: { opacity: 0, y: 35, scale: 0.96 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+              },
+            }}
+            whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.2 } }}
+            style={{
+              background: '#0d0d1f', border: '1px solid rgba(120,120,200,0.18)',
+              borderRadius: '14px', padding: '1.6rem', position: 'relative', overflow: 'hidden',
+              height: '100%', display: 'flex', flexDirection: 'column',
+            }}
+          >
               {/* top accent bar on hover via CSS trick — use a pseudo via JS */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
@@ -787,10 +810,9 @@ function Projects() {
                   <ExternalLink size={16} />
                 </a>
               </div>
-            </motion.div>
-          </Reveal>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
