@@ -93,6 +93,15 @@ const PROJECTS: Project[] = [
     image: 'https://opengraph.githubassets.com/1/Manu-del-source/zenpos',
   },
   {
+    title: 'M-Pesa Business Manager',
+    description: 'Financial infrastructure & developer backend platform for M-Pesa payments, B2C payouts, automated double-entry ledger accounting, and webhook dispatch.',
+    tags: ['Next.js', 'Prisma', 'M-Pesa Daraja', 'TypeScript', 'Fintech'],
+    badge: 'Backend',
+    badgeColor: 'purple',
+    link: 'https://github.com/Manu-del-source/mpesa-business-manager',
+    icon: '💳',
+  },
+  {
     title: 'SmartBiz365',
     description: 'Digital agency platform and portfolio showcasing websites, business systems, and AI-powered workflow automation for growing businesses in Kenya.',
     tags: ['React 19', 'Vite', 'Tailwind CSS', 'Framer Motion'],
