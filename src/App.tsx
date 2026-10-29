@@ -105,16 +105,7 @@ const PROJECTS: Project[] = [
     icon: '💼',
     image: '/images/projects/smartbiz.png',
   },
-  {
-    title: 'Poppies',
-    description: 'Restaurant website for an urban dining spot in Nairobi CBD. Bold editorial design with specials, full menu, gallery, reviews, and table booking.',
-    tags: ['React', 'Framer Motion', 'Tailwind', 'Vercel'],
-    badge: 'Live',
-    badgeColor: 'green',
-    link: 'https://poppies.vercel.app',
-    icon: '🍽️',
-    image: '/images/projects/poppies.png',
-  },
+
   {
     title: 'SecureSight CCTV',
     description: 'Professional security and surveillance service platform providing a clear path from security enquiries to trusted CCTV installations.',
