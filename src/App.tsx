@@ -15,7 +15,6 @@ interface Project {
   badge: string;
   badgeColor: 'cyan' | 'green' | 'purple' | 'yellow';
   link: string;
-  icon: string;
   image?: string;
 }
 
@@ -82,8 +81,7 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://www.malihubke.online',
-    icon: '🛒',
-    image: '/images/projects/malihub.png',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/Malihub--kenya',
   },
   {
     title: 'ZenPOS',
@@ -92,8 +90,7 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://zenpos.co.ke/',
-    icon: '⚡',
-    image: '/images/projects/zenpos.png',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/zenpos',
   },
   {
     title: 'SmartBiz365',
@@ -102,8 +99,7 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://smartbiz365.site/',
-    icon: '💼',
-    image: '/images/projects/smartbiz.png',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/smartbiz',
   },
 
   {
@@ -113,8 +109,7 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://securesight.smartbiz365.site/',
-    icon: '🔒',
-    image: '/images/projects/securesight.png',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/SecureSight-CCTV',
   },
 
   {
@@ -124,8 +119,43 @@ const PROJECTS: Project[] = [
     badge: 'Live',
     badgeColor: 'green',
     link: 'https://phikila.com',
-    icon: '🎓',
-    image: '/images/projects/phikila.png',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/Phikila-School-Management-System',
+  },
+  {
+    title: 'MotionBrag',
+    description: 'An AI-agent skill that plans and renders 30-60s promotional videos from a JSON brief using FFmpeg: crossfades and wipes, slide-up titles, shake/glitch/pulse effects, keyframe zooms and BPM-synced cuts.',
+    tags: ['Python', 'FFmpeg', 'Pillow', 'AI Agents'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/motionbrag',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/motionbrag',
+  },
+  {
+    title: 'Modelora',
+    description: 'Free AI Model and Image-to-Video Generator web app: Next.js/TypeScript frontend with FastAPI, PostgreSQL and Redis backend. Image generation, character consistency and signed private downloads.',
+    tags: ['Next.js', 'FastAPI', 'PostgreSQL', 'Redis'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/modelora',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/modelora',
+  },
+  {
+    title: 'AI Security Audit Skill',
+    description: 'Evidence-driven security audit skill with a CLI, 18 hunter playbooks, test fixtures and an adversarial validation step for auditing software repositories.',
+    tags: ['Python', 'Security', 'CLI', 'Claude Skills'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/ai-security-audit',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/ai-security-audit',
+  },
+  {
+    title: 'Frontend UI/UX Skill',
+    description: 'A Claude Code skill for frontend UI/UX review and build guidance, with reference docs, checklists and a validator plus node tests.',
+    tags: ['TypeScript', 'UI/UX', 'Claude Skills'],
+    badge: 'Open Source',
+    badgeColor: 'cyan',
+    link: 'https://github.com/Manu-del-source/frontend-uiux-skill',
+    image: 'https://opengraph.githubassets.com/1/Manu-del-source/frontend-uiux-skill',
   },
 ];
 
@@ -775,7 +805,6 @@ function Projects() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <span style={{ fontSize: '1.4rem' }}>{p.icon}</span>
                   <span style={{ fontWeight: 600, fontSize: '1rem', color: '#e8e8f8' }}>{p.title}</span>
                 </div>
                 <Badge label={p.badge} color={p.badgeColor} />
