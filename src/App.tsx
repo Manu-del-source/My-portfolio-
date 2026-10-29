@@ -75,6 +75,24 @@ const SKILL_GROUPS: SkillGroup[] = [
 
 const PROJECTS: Project[] = [
   {
+    title: 'Poppies',
+    description: 'Restaurant website for an urban dining spot in Nairobi CBD. Bold editorial design with specials, full menu, gallery, reviews, and table booking — deployed and live on Vercel.',
+    tags: ['React', 'Framer Motion', 'Tailwind', 'Vercel'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://poppies.vercel.app',
+    image: '/images/projects/poppies.png',
+  },
+  {
+    title: 'Lumina',
+    description: 'Immersive event landing page for an audiovisual festival in Nairobi. Animated hero, lineup, ticketing sections, and a glowing neon aesthetic with scrolling marquee — live on Vercel.',
+    tags: ['React', 'Framer Motion', 'CSS Animations', 'Vercel'],
+    badge: 'Live',
+    badgeColor: 'green',
+    link: 'https://lumina-rosy.vercel.app',
+    image: '/images/projects/lumina.png',
+  },
+  {
     title: 'MaliHub Kenya',
     description: 'A full-stack marketplace and e-commerce platform built for Kenya, featuring product discovery, seller onboarding, buyer workflows, and secure M-Pesa STK Push payments.',
     tags: ['Next.js 15', 'Supabase', 'M-Pesa Daraja', 'TypeScript', 'Tailwind'],
