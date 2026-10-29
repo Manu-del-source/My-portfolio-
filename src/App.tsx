@@ -116,16 +116,7 @@ const PROJECTS: Project[] = [
     icon: '🔒',
     image: '/images/projects/securesight.png',
   },
-  {
-    title: 'WiFiFLOW',
-    description: 'A modern WiFi hotspot billing and management platform built for ISPs, hotels, cafés, and schools with voucher management and MikroTik router integration.',
-    tags: ['React', 'Node.js', 'Supabase', 'MikroTik API'],
-    badge: 'GitHub',
-    badgeColor: 'cyan',
-    link: 'https://github.com/Manu-del-source/wifi-billing-system',
-    icon: '📶',
-    image: '/images/projects/wififlow.jpg',
-  },
+
   {
     title: 'Phikila',
     description: 'All-in-one school operations platform for African schools managing student records, academics, timetables, finance, and reporting.',
