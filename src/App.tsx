@@ -81,7 +81,7 @@ const PROJECTS: Project[] = [
     tags: ['Next.js 15', 'Supabase', 'M-Pesa Daraja', 'TypeScript', 'Tailwind'],
     badge: 'Live',
     badgeColor: 'green',
-    link: 'https://malihub.smartbiz365.site/',
+    link: 'https://www.malihubke.online',
     icon: '🛒',
     image: '/images/projects/malihub.png',
   },
